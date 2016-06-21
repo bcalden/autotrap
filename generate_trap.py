@@ -1,5 +1,3 @@
-__author__ = 'brian alden'
-
 import sys
 import templates
 import os

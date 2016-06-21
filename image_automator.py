@@ -1,9 +1,5 @@
 #!/usr/bin/python
 
-__author__ = 'brian alden'
-__email__ = 'brianalden@gwmail.gwu.edu'
-
-
 import os, subprocess, re, pyrap.tables as pt, sys
 from optparse import OptionParser
 from datetime import datetime
