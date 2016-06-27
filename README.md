@@ -2,12 +2,12 @@ autotrap
 ==========
 Table of Contents
 -----------
-* [Project Overview](#Project-Overview)
-* [Getting Started](#Getting-Started)
-* [image_automator.py](#image_automator.py)
-* [generate_trap.py](#generate_trap.py)
-* [templates.py](#templates.py)
-* [graph_tools.py](#graph_tools.py)
+* [Project Overview](#project-overview)
+* [Getting Started](#getting-started)
+* [image_automator.py](#image_automatorpy)
+* [generate_trap.py](#generate_trappy)
+* [templates.py](#templatespy)
+* [graph_tools.py](#graph_toolspy)
 * [Contributing](#contributing)
 
 #Project Overview
