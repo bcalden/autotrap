@@ -41,7 +41,7 @@ You would then run the following command to start the image automator.
 
 `nohup python /[path_to_the_autotrap]/autotrap/image_automator.py -m /scratch/username/ms_data/MS3_dataset/ -d /scratch/username/ms_data/MS3_params/ -o /scratch/username/ms_data/MS3_Images/ > ms3_image_output.log & `
 
-The `nohup` command and the `&amp;` may be confusing if you are not familiar with them.
+The `nohup` command and the `&` may be confusing if you are not familiar with them.
 #### nohup
 Running the nohup command ensures whatever command you place after it (in this case, the image automator) continues even after you exit the terminal session. The `> ms3_image_output.log` at the end of the command forwards all output to the file `ms3_image_output.log` instead of the terminal. Further information can be found [here](http://linux.die.net/man/1/nohup).
 
