@@ -18,6 +18,7 @@ The other file included, [templates.py](#templatespy) is called by generate_trap
 Descriptions of each with examples can be found below.
 
 #Installing / Getting Started
+## Installing
 To install this project, simply run `git clone https://github.com/bcalden/autotrap.git` in your command line. This command should download this repository to whatever your current directory is and place it in the newly created `autotrap` directory. Nothing further needs to be installed (unless you need any of the dependencies).
 
 ## Dependencies
@@ -26,6 +27,38 @@ To install this project, simply run `git clone https://github.com/bcalden/autotr
 * [psycopg2](http://initd.org/psycopg/)
 * [pexpect](https://pexpect.readthedocs.io/en/stable/)
 
+## Sample Work Flow
+Say you have a set of data in .MS format that you want convert to images, put into TraP, and analyze the results. This workflow is for you!
+ Note: for a full list of options each step of the way, please read the section pertaining to the respective part.
+
+###Make the Images
+The first step of the process is to convert the .MS files into images. This can be achieved by running the [image automator](#image_automator.py) on the data.
+Lets say all of the .MS files were located in the folder `/scratch/username/ms_data/MS3_dataset/`.
+In this example, you aren't going to slice the images up into smaller files (but there is an example below which covers that).
+The automator will generate the parameter files and the images so you have to provide directories where it should write to.
+Lets say you want the .param files stored in `/scratch/username/ms_data/MS3_params/` and the images stored in `/scratch/username/ms_data/MS3_Images/`.
+You would then run the following command to start the image automator.
+
+`nohup python /[path_to_the_autotrap]/autotrap/image_automator.py -m /scratch/username/ms_data/MS3_dataset/ -d /scratch/username/ms_data/MS3_params/ -o /scratch/username/ms_data/MS3_Images/ > ms3_image_output.log &amp; `
+
+The `nohup` command and the `&amp;` may be confusing if you are not familiar with them.
+#### nohup
+Running the nohup command ensures whatever command you place after it (in this case, the image automator) continues even after you exit the terminal session. The `> ms3_image_output.log` at the end of the command forwards all output to the file `ms3_image_output.log` instead of the terminal. Further information can be found [here](http://linux.die.net/man/1/nohup).
+
+#### &amp;
+The `&amp;` at the end of the command places the task in the background. This allows you access to the commandline to either run other tasks or monitor the output while still using the `nohup` command.
+
+*Note: To monitor the output of the automator while running it in the background, you can run `tail -f ms3_image_output.log`.*
+
+###Put the Images Into TraP
+You now have a set of newly created images (in .restored.corr format) located in `/scratch/username/ms_data/MS3_Images/`. To get these into TraP, you can run [generate_trap.py](#generate_trappy). *Be sure to put your username / password in the [templates.py](#templatespy) file.*
+
+`nohup python /[path_to_autotrap]/autotrap/generate_trap.py --name bca_ms3_images --images /scratch/username/ms_data/MS3_Images --elliptical 2.0 > trap_output.log &amp;`
+
+Running the above command would create the configuration files and run TraP. The database name would be bca_ms3_images.
+
+###Generate Graphs
+Now that the data is in Banana, you can begin to analyze the data and generate graphs. A common graph is the η<sub>ν</sub> vs. V<sub>ν</sub> graph. To create this, follow the instructions in the section on[graph_tools.py](#graph_toolspy).
 
 # image_automator.py
 
