@@ -11,13 +11,20 @@ Table of Contents
 * [Contributing](#contributing)
 
 #Project Overview
-Autotrap is a collection of automation utilities for use with the LOFAR Transient Pipeline (TraP - https://github.com/transientskp/tkp) and AWImager.
-There are three main files used for image generation, sending the images to the TraP, and generating graphs as output. These files are image_automator.py, generate_trap.py, and graph_tools.py respectively.
-The other file included, templates.py is called by generate_trap.py and contains templates for TraP parameters.
-Descriptions of each with examples can be found below. For further usage information, please see the wiki - https://github.com/bcalden/autotrap/wiki.
+Autotrap is a collection of automation utilities for use with the [LOFAR Transient Pipeline (TraP)](#https://github.com/transientskp/tkp) and AWImager.
+With these tools, one can automate image creation, simplify configuring and running the TraP on these images, and generating graphs helpful for data analysis.
+There are three main files used for image generation, sending the images to the TraP, and generating graphs as output. These files are [image_automator.py](#image_automatorpy), [generate_trap.py](#generate_trappy), and [graph_tools.py](#graph_toolspy) respectively.
+The other file included, [templates.py](#templatespy) is called by generate_trap.py and contains templates for TraP parameters.
+Descriptions of each with examples can be found below.
 
-#Getting Started
+#Installing / Getting Started
+To install this project, simply run `git clone https://github.com/bcalden/autotrap.git` in your command line. This command should download this repository to whatever your current directory is and place it in the newly created `autotrap` directory. Nothing further needs to be installed (unless you need any of the dependencies).
 
+## Dependencies
+* [Transient Pipeline (TraP)](https://github.com/transientskp/tkp)
+* [MatPlotLib 1.5.1](#http://matplotlib.org)
+* [psycopg2](#http://initd.org/psycopg/)
+* [pexpect](#https://pexpect.readthedocs.io/en/stable/)
 
 
 # image_automator.py
@@ -128,23 +135,67 @@ This function iterates through a dictionary of MS files, generates their paramet
 #generate_trap.py
 
 ##Overview
-This script essentially creates the configuration files required for TraP to run, and then runs TraP.
+This script creates the configuration files required for TraP to run, and then runs TraP. It creates the configuration files based upon the strings in `templates.py`. Prior to running it is imperative that you go through the `templates.py` file and change the parameters as indicated in [the templates.py section](#templatespy)
 
 ##Dependencies
+* [Transient Pipeline (TraP)](https://github.com/transientskp/tkp)
 * templates.py *(included in this repository)*
+
 ##Usage
+Usage: generator.py [options]
+
+##Options:
+|   Option                  | Long option                   | Description                                                       |
+|---------------------------|-------------------------------|--------------------------------------------------|
+|  -h                       |   --help                      |   show this help message and exit
+|  -n DATABASE              |   --name=database_name        |   database name
+|  -b HIGH_BOUND            |   --high-bound=#              |   multiplied with noise to define upper threshold
+|  -e ELLIPTICAL            |   --elliptical=#              |   threshold for elliptical check
+|  -f FORCE_BEAM            |   --force_beam=true/false     |   Toggle force beam (true or false)
+|  -d DETECTION_THRESHOLD   |   --detection_threshold=#     |   Set the detection threshold
+|  -i IMAGES                |   --images=directory          |   folder containing images to process
+|  -x EXT                   |   --extension=file_extension  |   extension of files in images folder *(defaults to .restored.corr)*
+|  -s SETUP                 |   --setup=database_name       |   Setup initial options
+|  -r DROPDBNAME            |   --dropdb=database_name      |   deletes the database *(provided it is one you can delete)*
+
+Example: python generate_trap.py --name balden_sliced_high_250_ellip_5 --images /scratch/balden/Images/sliced --elliptical 5.0 --high-bound 250 &
+
 
 #templates.py
+
 ##Overview
-The templates.py file contains the templates for pipeline.cfg, job_config.cfg, and images_to_process used by the transient pipeline (TraP) and generate_trap.py. Each of these templates are stored in multiline strings and require customization to your particular user attributes before first use. It is HIGHLY recommended that if generate_trap.py is used, the templates.py file is not accessible by anyone you would not want to have access to your username and password. These two attributes are input in the `pipeline` string.
+The templates.py file contains the templates for pipeline.cfg, job_config.cfg, and images_to_process used by the transient pipeline (TraP) and generate_trap.py.
+Each of these templates are stored in multiline strings and require customization to your particular user attributes before first use. It is HIGHLY recommended that if generate_trap.py is used, the templates.py file is not accessible by anyone you would not want to have access to your username and password. These two attributes are input in the `pipeline` string.
+
 ##Usage
+Prior to running `generate_trap.py` you need to edit the template strings so they contain your particular user information.
+As this script is all about ease of use, it follows some rather lax security practices such as storing database usernames and passwords.
+Because of this, `autotrap` and `templates.py` in specific should only be installed in a directory that only you or people you are ok with having your database password have access to.
+
+The file is three strings for generation of pipeline.cfg, job_config.cfg, and images_to_process. In the pipeline string, your username and password for the PostgreSQL database should be entered between the quotes. If any of the server is not correct, it can be updated as well.
+Nothing needs to be updated in images_to_process. The job_config string can be updated with default values for each setting.
 
 #graph_tools.py
 
+##Overview
 The graph_tools.py script contains multiple functions for different types of graph generation. This includes graphing the RMS noise, the variability parameters (V vs. Eta), etc.
 
 ##Dependencies
-* [MatPlotLib 1.5.1](#http://matplotlib.org)
-* [psycopg2](#http://initd.org/psycopg/)
+* [MatPlotLib 1.5.1](http://matplotlib.org)
+* [psycopg2](http://initd.org/psycopg/)
+
+##Usage
+At the top of the file you should add your database username, password, and the database name you want to generate the graphs for. As this is a not the best security practice, it is strongly advised that autotrap should be stored in a directory that can only be accessed by you or people you don't mind having your database username or password. This will be updated in the next revision.
+To use this script, you can either import the file into the Python REPL, or into a iPython/Jupyter notebook. It can also be run directly by editing the `__main__` portion of the file to include the graphs you want generated.
+
+
+### η<sub>ν</sub> vs. V<sub>ν</sub> :  `create_graph_v_vs_eta(data, outputname, inc_simulated=False)`
+This function queries the database name indicated at the top of the file to get the η<sub>ν</sub> and V<sub>ν</sub> values for each source. Simulated data can be included by providing the text files listed within the function. These simulated files were obtained from [Antonia Rowlinson's](https://github.com/AntoniaR) [TraP_Trans_Tools](https://github.com/AntoniaR/TraP_trans_tools). The graph is saved in your current directory and is named whatever was supplied as the output name.
+
+
+
+##Future Development
+Update to accept command line arguments for username, password, database name, and type of graphs. Change `__main__` functionality to either use options passed at the command line or query the user for the options. Further areas of development potential are seeing how this can be integrated with TraP's usage of SQLAlchemy.
 
 #Contributing
+Contributions are greatly appreciated. If you have a bug request or think there is a better way to implement some part of this project, feel free to fill out an issue on GitHub.

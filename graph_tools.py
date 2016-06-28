@@ -10,6 +10,12 @@ import os
 from psycopg2 import connect
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
+username = ''
+password = ''
+host = 'vlo.science.uva.nl'
+db_name = ''
+
+
 real_keys = {"taustart",
         "tau_time",
         "f_int",
@@ -344,11 +350,6 @@ def create_diag_plots(data, filename, inc_simulated=False):
 
 
 if __name__ == "__main__":
-    username = ''
-    password = ''
-    host = 'vlo.science.uva.nl'
-    db_name = ''
-
     #print get_sim_data("sim_single_flare_trans_data.txt")
 
     data = get_data(host, db_name, username, password)
