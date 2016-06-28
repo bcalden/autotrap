@@ -58,7 +58,7 @@ You now have a set of newly created images (in .restored.corr format) located in
 Running the above command would create the configuration files and run TraP. The database name would be bca_ms3_images.
 
 ###Generate Graphs
-Now that the data is in Banana, you can begin to analyze the data and generate graphs. A common graph is the η<sub>ν</sub> vs. V<sub>ν</sub> graph. To create this, follow the instructions in the section on[graph_tools.py](#graph_toolspy).
+Now that the data is in Banana, you can begin to analyze the data and generate graphs. A common graph is the η<sub>ν</sub> vs. V<sub>ν</sub> graph. To create this, follow the instructions in the section on [graph_tools.py](#graph_toolspy).
 
 # image_automator.py
 
