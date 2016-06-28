@@ -11,7 +11,7 @@ Table of Contents
 * [Contributing](#contributing)
 
 #Project Overview
-Autotrap is a collection of automation utilities for use with the [LOFAR Transient Pipeline (TraP)](#https://github.com/transientskp/tkp) and AWImager.
+Autotrap is a collection of automation utilities for use with the [LOFAR Transient Pipeline (TraP)](https://github.com/transientskp/tkp) and AWImager.
 With these tools, one can automate image creation, simplify configuring and running the TraP on these images, and generating graphs helpful for data analysis.
 There are three main files used for image generation, sending the images to the TraP, and generating graphs as output. These files are [image_automator.py](#image_automatorpy), [generate_trap.py](#generate_trappy), and [graph_tools.py](#graph_toolspy) respectively.
 The other file included, [templates.py](#templatespy) is called by generate_trap.py and contains templates for TraP parameters.
@@ -22,9 +22,9 @@ To install this project, simply run `git clone https://github.com/bcalden/autotr
 
 ## Dependencies
 * [Transient Pipeline (TraP)](https://github.com/transientskp/tkp)
-* [MatPlotLib 1.5.1](#http://matplotlib.org)
-* [psycopg2](#http://initd.org/psycopg/)
-* [pexpect](#https://pexpect.readthedocs.io/en/stable/)
+* [MatPlotLib 1.5.1](http://matplotlib.org)
+* [psycopg2](http://initd.org/psycopg/)
+* [pexpect](https://pexpect.readthedocs.io/en/stable/)
 
 
 # image_automator.py
@@ -51,7 +51,9 @@ Usage: image_automator.py [options]
 |  -f                   |  --fits_from_field                    | Make fits images for a field                                      |
 |  -s                   |  --no_overwrite                       | Don't overwrite any of the images                                 |
 
-Example: `python image_automator.py -n 7 -m /scratch/balden/MS3_MVF -o /scratch/balden/timeslice/images -d /scratch/balden/timeslice/params -s &`
+Example:
+`python image_automator.py -n 7 -m /scratch/balden/MS3_MVF -o /scratch/balden/timeslice/images -d /scratch/balden/timeslice/params -s &`
+
 This example would take .MS files from the `/scratch/balden/MS3_MVF` directory, generate the parameter files and save them to `/scratch/balden/timeslice/params`. From there it will run AWImager on the parameter files as they are generated and store the resulting `.restored.corr` files in `/scratch/balden/timeslice/images`. It should be noted that as the `-n 7` option was passed, each .MS file will result in 7 `.restored.corr` files. Further, as the `-s` option was passed, if the files already exist they will not be overwritten. This option is useful when you are restarting a previously stopped run of the automator.
 
 
@@ -189,7 +191,9 @@ At the top of the file you should add your database username, password, and the 
 To use this script, you can either import the file into the Python REPL, or into a iPython/Jupyter notebook. It can also be run directly by editing the `__main__` portion of the file to include the graphs you want generated.
 
 
-### η<sub>ν</sub> vs. V<sub>ν</sub> :  `create_graph_v_vs_eta(data, outputname, inc_simulated=False)`
+### η<sub>ν</sub> vs. V<sub>ν</sub>
+`create_graph_v_vs_eta(data, outputname, inc_simulated=False)`
+
 This function queries the database name indicated at the top of the file to get the η<sub>ν</sub> and V<sub>ν</sub> values for each source. Simulated data can be included by providing the text files listed within the function. These simulated files were obtained from [Antonia Rowlinson's](https://github.com/AntoniaR) [TraP_Trans_Tools](https://github.com/AntoniaR/TraP_trans_tools). The graph is saved in your current directory and is named whatever was supplied as the output name.
 
 
